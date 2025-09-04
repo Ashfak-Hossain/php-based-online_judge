@@ -61,7 +61,7 @@ class Router
   }
   public function setMethodNotAllowed($handler)
   {
-    $this->methodNotAllowedHandler = $handler;
+    $this->notAllowedHandler = $handler;
   }
 
   // Insert route into trie in O(m)
@@ -186,8 +186,8 @@ class Router
   {
     http_response_code(405);
     header("Allow: " . implode(", ", $allowed));
-    if ($this->methodNotAllowedHandler && is_callable($this->methodNotAllowedHandler)) {
-      return call_user_func($this->methodNotAllowedHandler, $allowed);
+    if ($this->notAllowedHandler && is_callable($this->notAllowedHandler)) {
+      return call_user_func($this->notAllowedHandler, $allowed);
     }
     echo "MEthod Now ALlowed";
     return;
