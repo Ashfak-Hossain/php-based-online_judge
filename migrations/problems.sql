@@ -17,7 +17,7 @@ CREATE TABLE problems (
   FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
   INDEX (slug),
   INDEX (difficulty)
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 
 CREATE TABLE test_cases (
