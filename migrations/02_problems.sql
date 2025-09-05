@@ -14,9 +14,10 @@ CREATE TABLE problems (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   created_by BIGINT UNSIGNED,
-  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX(created_by),
   INDEX (slug),
-  INDEX (difficulty)
+  INDEX (difficulty),
+  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 
