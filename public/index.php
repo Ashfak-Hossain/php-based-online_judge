@@ -1,5 +1,12 @@
 <?php
+/* Showing error */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once dirname(__DIR__) . "/src/router.php";
+require_once dirname(__DIR__) . "/src/config.php";
+require_once dirname(__DIR__) . "/src/controllers/AuthController.php";
 
 $router = new Router([
   "basePath" => "/online_judge/public",
@@ -7,8 +14,12 @@ $router = new Router([
 ]);
 
 // Authentication
-$router->get("/login", "auth/login");
-$router->get("/signup", "auth/signup");
+$authController = new AuthController($pdo);
+
+$router->get("/signup", [$authController, "signupForm"]);
+$router->post("/signup", [$authController, "signup"]);
+$router->get("/login", [$authController, "loginForm"]);
+$router->post("/login", [$authController, "login"]);
 
 
 $router->get("/", "home");

@@ -4,6 +4,8 @@ $db_name = "cp_arena";
 $db_user = "root";
 $db_password = "";
 
+define("BASE_URL", "/online_judge/public");
+
 try {
   $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_password);
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
