@@ -43,9 +43,6 @@ $router->post("/admin/problems/delete/$slug", [$problemController, "delete"], [$
 
 /* Home Route */
 $router->get("/", "home", [$auth]);
-$router->get('/user/$id', function ($id) {
-  echo "User: $id";
-}, [$auth]);
 
 /* Error Pages */
 $router->setNotFound("not_found");

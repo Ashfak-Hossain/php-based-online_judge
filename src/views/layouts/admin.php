@@ -8,12 +8,21 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- toastify -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
-  <main class="flex-grow container mx-auto px-4 py-6">
+  <?php include __DIR__ . "/../components/admin_nav.php"; ?>
+  <main class="flex-grow py-6">
     <?php include $content; ?>
   </main>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>
