@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/User.php";
+require_once __DIR__ . "/../helpers/toast.php";
 
 class AuthController
 {
@@ -12,42 +13,50 @@ class AuthController
 
   public function signupForm()
   {
-    require __DIR__ . "/../views/auth/signup.php";
+    $title = "Sign Up";
+    $content = __DIR__ . "/../views/auth/signup.php";
+    require __DIR__ . "/../views/layouts/auth.php";
   }
 
   public function loginForm()
   {
-    require __DIR__ . "/../views/auth/login.php";
+    $title = "Log In";
+    $content = __DIR__ . "/../views/auth/login.php";
+    require __DIR__ . "/../views/layouts/auth.php";
   }
 
   public function login($request)
   {
-    $username = $request["post"]["username"] ?? "";
+    $error = "";
+    $email = $request["post"]["email"] ?? "";
     $password = $request["post"]["password"] ?? "";
 
-    $user = $this->userModel->verifyPassword($username, $password);
+    $user = $this->userModel->verifyPasswordByEmail($email, $password);
     if ($user) {
       session_regenerate_id(true);
       $_SESSION["user"] = [
         "id" => $user["id"],
         "username" => $user["username"],
+        "email" => $user["email"],
         "role" => $user["role"],
       ];
+      $_SESSION["toast"] = ["message" => "Logged in successfully.", "type" => "success"];
       header("Location: /online_judge/public/");
       exit;
     }
 
-    $error = "Invalid username or password.";
-    require __DIR__ . "/../views/auth/login.php";
+    $error = "Invalid email or password.";
+    $title = "Log In";
+    $content = __DIR__ . "/../views/auth/login.php";
+    require __DIR__ . "/../views/layouts/auth.php";
   }
 
   public function signup($request)
   {
+    $errors = [];
     $username = $request["post"]["username"] ?? "";
     $email = $request["post"]["email"] ?? "";
     $password = $request["post"]["password"] ?? "";
-
-    $errors = [];
 
     if ($this->userModel->findByUsername($username)) {
       $errors["username"] = "Username already exists";
@@ -63,11 +72,15 @@ class AuthController
     // }
 
     if (!empty($errors)) {
-      require __DIR__ . "/../views/auth/signup.php";
+      $title = "Sign Up";
+      $content = __DIR__ . "/../views/auth/signup.php";
+      require __DIR__ . "/../views/layouts/auth.php";
       return;
     }
 
+    // create user
     $this->userModel->create($username, $email, $password);
+    $_SESSION["toast"] = ["message" => "Account created successfully. Please log in.", "type" => "success"];
     header("Location: /online_judge/public/login");
     exit;
   }
