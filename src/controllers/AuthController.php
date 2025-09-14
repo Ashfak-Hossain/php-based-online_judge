@@ -20,11 +20,10 @@ class AuthController
     require __DIR__ . "/../views/auth/login.php";
   }
 
-  public function login()
+  public function login($request)
   {
-    session_start();
-    $username = $_POST["username"] ?? "";
-    $password = $_POST["password"] ?? "";
+    $username = $request["post"]["username"] ?? "";
+    $password = $request["post"]["password"] ?? "";
 
     $user = $this->userModel->verifyPassword($username, $password);
     if ($user) {
@@ -42,11 +41,11 @@ class AuthController
     require __DIR__ . "/../views/auth/login.php";
   }
 
-  public function signup()
+  public function signup($request)
   {
-    $username = $_POST["username"] ?? "";
-    $email = $_POST["email"] ?? "";
-    $password = $_POST["password"] ?? "";
+    $username = $request["post"]["username"] ?? "";
+    $email = $request["post"]["email"] ?? "";
+    $password = $request["post"]["password"] ?? "";
 
     $errors = [];
 
@@ -57,10 +56,11 @@ class AuthController
       $errors["email"] = "Email already used";
     }
 
-    $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
-    if (!preg_match($passwordPattern, $password)) {
-      $errors["password"] = "Password must be at least 6 char long including upper, lower, number and special character at least once";
-    }
+    //! For development purpose only
+    // $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
+    // if (!preg_match($passwordPattern, $password)) {
+    //   $errors["password"] = "Password must be at least 6 char long including upper, lower, number and special character at least once";
+    // }
 
     if (!empty($errors)) {
       require __DIR__ . "/../views/auth/signup.php";
