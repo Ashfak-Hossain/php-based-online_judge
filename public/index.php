@@ -18,23 +18,36 @@ $router = new Router([
 
 $authController = new AuthController($pdo);
 
-$authSuperAdmin = new AuthMiddleware(BASE_URL, ['super_admin']);
-$adminAuth = new AuthMiddleware(BASE_URL, ['admin']);
-$guestAuth = new AuthMiddleware(BASE_URL, [], true);
 $auth = new AuthMiddleware(BASE_URL);
+$authGuest = new AuthMiddleware(BASE_URL, [], true);
+$authAdmin = new AuthMiddleware(BASE_URL, ['admin']);
+$authSuperAdmin = new AuthMiddleware(BASE_URL, ['super_admin']);
 
-$router->get("/signup", [$authController, "signupForm"], [$guestAuth]);
+/* Authentication Routes */
+$router->get("/signup", [$authController, "signupForm"], [$authGuest]);
+$router->get("/login", [$authController, "loginForm"], [$authGuest]);
+
 $router->post("/signup", [$authController, "signup"]);
-$router->get("/login", [$authController, "loginForm"], [$guestAuth]);
 $router->post("/login", [$authController, "login"]);
 
 
-$router->get("/", "home", [$adminAuth]);
+/* Problems management Routes */
+$router->get("/admin/problems", [$problemController, "index"], [$authAdmin]);
+$router->get("/admin/problems/create", [$problemController, "createForm"], [$authAdmin]);
+$router->get("/admin/problems/edit/$slug", [$problemController, "editForm"], [$authAdmin]);
+
+$router->post("/admin/problems/create", [$problemController, "create"], [$authAdmin]);
+$router->post("/admin/problems/edit/$slug", [$problemController, "edit"], [$authAdmin]);
+$router->post("/admin/problems/delete/$slug", [$problemController, "delete"], [$authAdmin]);
+
+
+/* Home Route */
+$router->get("/", "home", [$auth]);
 $router->get('/user/$id', function ($id) {
   echo "User: $id";
 }, [$auth]);
 
-// Error Pages
+/* Error Pages */
 $router->setNotFound("not_found");
 
 $router->dispatch($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
