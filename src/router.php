@@ -29,29 +29,29 @@ class Router
   }
 
   // for http methods
-  public function get($path, $handler)
+  public function get($path, $handler, array $middlewares = [])
   {
-    $this->addRoute("GET", $path, $handler);
+    $this->addRoute("GET", $path, $handler, $middlewares);
   }
 
-  public function post($path, $handler)
+  public function post($path, $handler, array $middlewares = [])
   {
-    $this->addRoute("POST", $path, $handler);
+    $this->addRoute("POST", $path, $handler, $middlewares);
   }
 
-  public function put($path, $handler)
+  public function put($path, $handler, array $middlewares = [])
   {
-    $this->addRoute("PUT", $path, $handler);
+    $this->addRoute("PUT", $path, $handler, $middlewares);
   }
 
-  public function delete($path, $handler)
+  public function delete($path, $handler, array $middlewares = [])
   {
-    $this->addRoute("DELETE", $path, $handler);
+    $this->addRoute("DELETE", $path, $handler, $middlewares);
   }
 
-  public function any($path, $handler)
+  public function any($path, $handler, array $middlewares = [])
   {
-    $this->addRoute("ANY", $path, $handler);
+    $this->addRoute("ANY", $path, $handler, $middlewares);
   }
 
   // extra methods
@@ -66,7 +66,7 @@ class Router
 
   // Insert route into trie in O(m)
   // addRoute("GET", "/login", ()=>{})
-  private function addRoute($method, $path, $handler)
+  private function addRoute($method, $path, $handler, array $middlewares = [])
   {
     $method = strtoupper($method);
     $segments = $this->splitPath($path);
@@ -90,7 +90,10 @@ class Router
         $node =  $node->children[$seg];
       }
     }
-    $node->handlers[$method] = $handler;
+    $node->handlers[$method] = [
+      "handler" => $handler,
+      "middlewares" => $middlewares
+    ];
   }
 
   // match req and exec handler in O(m)
@@ -140,28 +143,53 @@ class Router
       }
     }
 
-    $handler = $node->handlers[$method] ?? ($node->handlers["ANY"] ?? null);
-    if ($handler === null) {
+    $entry = $node->handlers[$method] ?? ($node->handlers["ANY"] ?? null);
+    if ($entry === null) {
       if (!empty($node->handlers)) {
         return $this->handleMethodNotAllowed(array_keys($node->handlers));
       }
       return $this->handleNotFound();
     }
 
-    if (is_callable($handler)) return call_user_func_array($handler, $params);
+    $handler = $entry["handler"];
+    $middlewares = $entry["middlewares"] ?? [];
 
-    // print_r("fullPath -> " . $handler . "<br>");
+    $request = [
+      "get" => $_GET,
+      "post" => $_POST,
+      "server" => $_SERVER,
+      "cookies" => $_COOKIE,
+      "session" => $_SESSION,
+      "params" => $params,
+    ];
 
-    if (is_string($handler)) {
-      $fileName = $handler . ".php";
-      $fullPath = $this->viewDir . "/" . $fileName;
-      if (is_file($fullPath)) return require $fullPath;
+    $next = function ($req) use ($handler, $params) {
+      if (is_callable($handler)) {
+        return call_user_func($handler, $req, ...array_values($params));
+      }
+
+      // print_r("fullPath -> " . $handler . "<br>");
+
+      if (is_string($handler)) {
+        $fileName = $handler . ".php";
+        $fullPath = $this->viewDir . "/" . $fileName;
+        if (is_file($fullPath)) return require $fullPath;
+        http_response_code(500);
+        echo "View file Not Found: " . htmlspecialchars($fullPath) . "<br>";
+        return;
+      }
+
       http_response_code(500);
-      echo "View file Not Found: " . htmlspecialchars($fullPath) . "<br>";
+      echo "Invalid route <br>";
+      return;
+    };
+
+    foreach (array_reverse($middlewares) as $mw) {
+      $next = function ($req) use ($mw, $next) {
+        return $mw->handle($req, $next);
+      };
     }
-    http_response_code(500);
-    echo "Invalid route <br>";
-    return;
+    return $next($request);
   }
 
   // Not Found Error
