@@ -12,7 +12,7 @@ require_once dirname(__DIR__) . "/src/controllers/AuthController.php";
 require_once dirname(__DIR__) . "/src/middleware/AuthMiddleware.php";
 
 $router = new Router([
-  "basePath" => "/online_judge/public",
+  "basePath" => BASE_URL,
   "viewDir" => dirname(__DIR__) . "/src/views"
 ]);
 

@@ -41,12 +41,14 @@ class AuthController
         "role" => $user["role"],
       ];
       $_SESSION["toast"] = ["message" => "Logged in successfully.", "type" => "success"];
-      header("Location: /online_judge/public/");
+      header("Location:" . BASE_URL);
       exit;
     }
 
     $error = "Invalid email or password.";
     $title = "Log In";
+    $emailValue = $email;
+    $passwordValue = $password;
     $content = __DIR__ . "/../views/auth/login.php";
     require __DIR__ . "/../views/layouts/auth.php";
   }
@@ -81,7 +83,7 @@ class AuthController
     // create user
     $this->userModel->create($username, $email, $password);
     $_SESSION["toast"] = ["message" => "Account created successfully. Please log in.", "type" => "success"];
-    header("Location: /online_judge/public/login");
+    header("Location:" . BASE_URL . "/login");
     exit;
   }
 }
