@@ -1,8 +1,8 @@
 <?php
 /* Showing error */
+error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 session_start();
 
@@ -28,11 +28,12 @@ $authAdmin = new AuthMiddleware(BASE_URL, ['admin']);
 $authSuperAdmin = new AuthMiddleware(BASE_URL, ['super_admin']);
 
 /* Authentication Routes */
-$router->get("/signup", [$authController, "signupForm"], [$authGuest]);
+$router->get("/logout", [$authController, "logout"], [$auth]);
 $router->get("/login", [$authController, "loginForm"], [$authGuest]);
+$router->get("/signup", [$authController, "signupForm"], [$authGuest]);
 
-$router->post("/signup", [$authController, "signup"]);
 $router->post("/login", [$authController, "login"]);
+$router->post("/signup", [$authController, "signup"]);
 
 
 /* Problems management Routes */
