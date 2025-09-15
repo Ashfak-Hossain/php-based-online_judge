@@ -62,9 +62,6 @@
     </div>
   </div>
   <script>
-    if (typeof lucide !== "undefined" && lucide.createIcons) {
-      lucide.createIcons();
-    }
     document.getElementById("togglePassword").addEventListener("click", function() {
       const pwdInput = document.getElementById("passwordInput");
       if (pwdInput.type === "password") {
@@ -73,9 +70,6 @@
       } else {
         pwdInput.type = "password";
         this.innerHTML = '<i data-lucide="eye"></i>';
-      }
-      if (typeof lucide !== "undefined" && lucide.createIcons) {
-        lucide.createIcons();
       }
     });
   </script>
