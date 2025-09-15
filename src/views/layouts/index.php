@@ -8,6 +8,7 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,7 +18,7 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
-  <?php include __DIR__ . "/../components/admin_nav.php"; ?>
+  <?php include __DIR__ . "/../components/nav.php"; ?>
   <main class="flex-grow py-6">
     <?php include $content; ?>
   </main>
