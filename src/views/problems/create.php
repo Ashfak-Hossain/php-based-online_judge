@@ -3,7 +3,7 @@ $tags = include __DIR__ . '/../../helpers/tags.php';
 ?>
 
 <div class="border border-b border-dashed p-4 rounded bg-transparent">
-  <form action="" method="POST" class="space-y-8">
+  <form action="<?= BASE_URL ?>/admin/problems/create" method="POST" class="space-y-8" data-module="problem-create">
 
     <div class="border-b border-gray-300 pb-6">
       <h2 class="text-xl font-semibold text-gray-900">

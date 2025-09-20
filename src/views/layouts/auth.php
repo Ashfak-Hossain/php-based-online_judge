@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="base-url" content="<?= BASE_URL ?>" />
+  <meta name="csrf-token" content="<?= $_SESSION['csrf'] ?? "" ?>" />
+
   <title><?= $title ?? 'Online Judge' ?></title>
 
   <!-- Tailwind -->
@@ -24,10 +27,12 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-
+      if (window.lucide && typeof lucide.createIcons === "function") {
+        lucide.createIcons();
+      }
     });
-    lucide.createIcons();
   </script>
+  <script type="module" src="<?= BASE_URL ?>/assets/js/main.js"></script>
 </body>
 
 </html>
