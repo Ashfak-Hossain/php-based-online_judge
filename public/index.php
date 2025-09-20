@@ -24,8 +24,8 @@ $problemController = new ProblemController($pdo);
 /* Middlewares */
 $auth = new AuthMiddleware(BASE_URL);
 $authGuest = new AuthMiddleware(BASE_URL, [], true);
-$authAdmin = new AuthMiddleware(BASE_URL, ['admin']);
-$authSuperAdmin = new AuthMiddleware(BASE_URL, ['super_admin']);
+$authAdmin = new AuthMiddleware(BASE_URL, ["admin", "super_admin"]);
+$authSuperAdmin = new AuthMiddleware(BASE_URL, ["super_admin"]);
 
 /* Authentication Routes */
 $router->get("/logout", [$authController, "logout"], [$auth]);

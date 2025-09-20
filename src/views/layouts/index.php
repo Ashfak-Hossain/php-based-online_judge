@@ -10,15 +10,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
   <!-- toastify -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
   <?php include __DIR__ . "/../components/nav.php"; ?>
+
+  <?php if ($user && ($user["role"] !== "user")): ?>
+    <?php include  __DIR__ . "/../components/adminHeading.php"; ?>
+  <?php endif; ?>
+
   <main class="flex-grow py-6">
     <?php include $content; ?>
   </main>

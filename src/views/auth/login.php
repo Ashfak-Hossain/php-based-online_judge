@@ -71,6 +71,8 @@
         pwdInput.type = "password";
         this.innerHTML = '<i data-lucide="eye"></i>';
       }
+      // won't work without added in the last
+      lucide.createIcons();
     });
   </script>
 </div>
