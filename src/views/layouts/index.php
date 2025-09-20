@@ -17,12 +17,15 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
   <?php include __DIR__ . "/../components/nav.php"; ?>
 
-  <?php if ($user && ($user["role"] !== "user")): ?>
-    <?php include  __DIR__ . "/../components/adminHeading.php"; ?>
-  <?php endif; ?>
+  <main class="flex-grow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Admin Panel -->
+      <?php if ($user && ($user["role"] !== "user")): ?>
+        <?php include  __DIR__ . "/../components/adminHeading.php"; ?>
+      <?php endif; ?>
 
-  <main class="flex-grow py-6">
-    <?php include $content; ?>
+      <?php include $content; ?>
+    </div>
   </main>
 
   <!-- Toastify JS -->
