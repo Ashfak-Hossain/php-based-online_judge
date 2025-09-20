@@ -30,14 +30,10 @@
 
   <!-- Toastify JS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
-    });
-  </script>
+  <!-- Main js -->
+  <script type="module" src="<?= BASE_URL ?>/assets/js/main.js"></script>
 </body>
 
 </html>
