@@ -3,9 +3,9 @@ export async function postForm(url, form) {
   const headers = {
     'X-Requested-With': 'XMLHttpRequest',
   };
-  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-  if (csrfMeta && csrfMeta.content) {
-    headers['X-CSRF-Token'] = csrfMeta.content;
+  const csrfMeta = document.querySelector('meta[name="csrf-token"]').content;
+  if (csrfMeta) {
+    headers['X-CSRF-Token'] = csrfMeta;
   }
 
   const response = await fetch(url, {

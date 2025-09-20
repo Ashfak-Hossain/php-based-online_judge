@@ -5,6 +5,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 session_start();
+if (empty($_SESSION['csrf'])) {
+  $_SESSION['csrf'] = bin2hex(random_bytes(32));
+}
 
 require_once dirname(__DIR__) . "/src/router.php";
 require_once dirname(__DIR__) . "/src/config.php";
