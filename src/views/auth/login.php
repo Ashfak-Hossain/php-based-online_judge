@@ -16,6 +16,7 @@
     ?>
 
     <form method="POST" action="<?= BASE_URL ?>/login" class="space-y-4">
+      <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input
