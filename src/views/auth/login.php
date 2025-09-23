@@ -1,3 +1,8 @@
+<?php
+$formAction = BASE_URL . '/login';
+?>
+
+
 <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
     <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
@@ -15,7 +20,7 @@
     }
     ?>
 
-    <form method="POST" action="<?= BASE_URL ?>/login" class="space-y-4">
+    <form method="POST" action="<?= $formAction ?>" class="space-y-4">
       <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>

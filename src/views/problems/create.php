@@ -1,9 +1,10 @@
 <?php
 $tags = include __DIR__ . '/../../helpers/tags.php';
+$formAction = BASE_URL . '/admin/problems/create';
 ?>
 
 <div class="border border-b border-dashed p-4 rounded bg-transparent">
-  <form action="<?= BASE_URL ?>/admin/problems/create" method="POST" class="space-y-8" data-module="problem-create">
+  <form action="<?= $formAction ?>" method="POST" class="space-y-8" data-module="problem-create">
 
     <div class="border-b border-gray-300 pb-6">
       <h2 class="text-xl font-semibold text-gray-900">
@@ -54,7 +55,7 @@ $tags = include __DIR__ . '/../../helpers/tags.php';
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-y-6">
+    <div class="grid grid-cols-2 gap-y-6 gap-x-6">
       <div>
         <label for="statement" class="block text-sm font-medium text-gray-900">Statement</label>
         <textarea id="statement" name="statement" rows="5" required
@@ -62,7 +63,7 @@ $tags = include __DIR__ . '/../../helpers/tags.php';
       </div>
       <div>
         <label for="input_format" class="block text-sm font-medium text-gray-900">Input Format</label>
-        <textarea id="input_format" name="input_format" rows="2" required
+        <textarea id="input_format" name="input_format" rows="5" required
           class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
       </div>
       <div>
