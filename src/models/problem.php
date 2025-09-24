@@ -16,9 +16,27 @@ class Problem
 
   public function getAll()
   {
-    $query = $this->pdo->prepare("SELECT * FROM problems ORDER BY created_at DESC");
+    $query = $this->pdo->prepare("SELECT p.*, u.username AS created_by FROM problems p LEFT JOIN users u ON p.created_by = u.id ORDER BY created_at DESC");
     $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    $problems = $query->fetchAll(PDO::FETCH_ASSOC);
+    if (!$problems) return [];
+
+    $problemIds = array_column($problems, 'id');
+    $placeholders = implode(',', array_fill(0, count($problemIds), '?'));
+
+    $tagQuery = $this->pdo->prepare("SELECT pt.problem_id, t.name FROM problem_tags pt JOIN tags t ON pt.tag_id = t.id WHERE pt.problem_id IN ($placeholders)");
+    $tagQuery->execute($problemIds);
+    $tagsData = $tagQuery->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($tagsData as $row) {
+      $tagsByProblem[$row['problem_id']][] = $row['name'];
+    }
+
+    foreach ($problems as &$problem) {
+      $problem['tags'] = $tagsByProblem[$problem['id']] ?? [];
+    }
+
+    return $problems;
   }
 
   public function getBySlug($slug)
