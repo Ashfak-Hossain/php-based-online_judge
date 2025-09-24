@@ -1,9 +1,15 @@
 <?php
+
+namespace App\models;
+
+use Exception;
+use PDO;
+
 class Problem
 {
   private $pdo;
 
-  public function __construct($pdo)
+  public function __construct(PDO $pdo)
   {
     $this->pdo = $pdo;
   }
@@ -22,6 +28,13 @@ class Problem
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function getByTitle($title)
+  {
+    $query = $this->pdo->prepare("SELECT * FROM problems WHERE title = ?");
+    $query->execute([$title]);
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getById($id)
   {
     $query = $this->pdo->prepare("SELECT * FROM problems WHERE id = ?");
@@ -31,8 +44,12 @@ class Problem
 
   public function create($data)
   {
-    $query = $this->pdo->prepare("INSERT INTO problems (slug, title, statement, input_format, output_format, constraints, example_input, example_output, difficulty, time_limit, memory_limit, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $query->execute([
+    $check = $this->getByTitle($data["title"]);
+    if ($check) {
+      throw new Exception("A problem with this title already exists");
+    }
+    $query = $this->pdo->prepare("INSERT INTO problems (slug, title, statement, input_format, output_format, constraints, example_input, example_output, difficulty, time_limit, memory_limit, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    if (!$query->execute([
       $data["slug"],
       $data["title"],
       $data["statement"],
@@ -45,14 +62,16 @@ class Problem
       $data["time_limit"] ?? 2000,
       $data["memory_limit"] ?? 256,
       $data["created_by"] ?? null
-    ]);
+    ])) {
+      throw new Exception("Failed to create problem");
+    };
     return $this->pdo->lastInsertId();
   }
 
   public function update($id, $data)
   {
     $query = $this->pdo->prepare("UPDATE problems SET slug = ?, title = ?, statement = ?, input_format = ?, output_format = ?, constraints = ?, example_input = ?, example_output = ?, difficulty = ?, time_limit = ?, memory_limit = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
-    return $query->execute([
+    if (!$query->execute([
       $data["slug"],
       $data["title"],
       $data["statement"],
@@ -65,12 +84,54 @@ class Problem
       $data["time_limit"] ?? 2000,
       $data["memory_limit"] ?? 256,
       $id
-    ]);
+    ])) {
+      throw new Exception("Failed to update problem");
+    };
+    return true;
   }
 
   public function delete($id)
   {
     $query = $this->pdo->prepare("DELETE FROM problems WHERE id = ?");
-    return $query->execute([$id]);
+    if (!$query->execute([$id])) {
+      throw new Exception("Failed to delete problem");
+    }
+    return true;
+  }
+
+  public function findOrCreateTag($tagName)
+  {
+    $query = $this->pdo->prepare("SELECT id FROM tags WHERE name = ?");
+    $query->execute([$tagName]);
+    $id = $query->fetchColumn();
+    if ($id) return $id;
+    $insert = $this->pdo->prepare("INSERT INTO tags (name) VALUES (?)");
+    if (!$insert->execute([$tagName])) {
+      throw new Exception("Failed to create new tag");
+    }
+    return $this->pdo->lastInsertId();
+  }
+
+  public function attachTag($problemId, $tagId)
+  {
+    $query = $this->pdo->prepare("INSERT IGNORE INTO problem_tags (problem_id, tag_id) VALUES (?, ?)");
+    if (!$query->execute([$problemId, $tagId])) {
+      throw new Exception("Failed to attach tag to problem");
+    }
+  }
+
+  public function beginTransaction()
+  {
+    $this->pdo->beginTransaction();
+  }
+
+  public function commit()
+  {
+    $this->pdo->commit();
+  }
+
+  public function rollBack()
+  {
+    $this->pdo->rollBack();
   }
 }
