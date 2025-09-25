@@ -1,3 +1,8 @@
+<?php
+$formAction = BASE_URL . '/login';
+?>
+
+
 <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
     <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
@@ -15,7 +20,8 @@
     }
     ?>
 
-    <form method="POST" action="<?= BASE_URL ?>/login" class="space-y-4">
+    <form method="POST" action="<?= $formAction ?>" class="space-y-4">
+      <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input
@@ -62,9 +68,6 @@
     </div>
   </div>
   <script>
-    if (typeof lucide !== "undefined" && lucide.createIcons) {
-      lucide.createIcons();
-    }
     document.getElementById("togglePassword").addEventListener("click", function() {
       const pwdInput = document.getElementById("passwordInput");
       if (pwdInput.type === "password") {
@@ -74,9 +77,8 @@
         pwdInput.type = "password";
         this.innerHTML = '<i data-lucide="eye"></i>';
       }
-      if (typeof lucide !== "undefined" && lucide.createIcons) {
-        lucide.createIcons();
-      }
+      // won't work without added in the last
+      lucide.createIcons();
     });
   </script>
 </div>

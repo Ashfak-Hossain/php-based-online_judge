@@ -23,16 +23,19 @@ class AuthMiddleware
       return $next($request);
     }
 
+    // var_dump($user);
+
     if (empty($user)) {
       header("Location: " . $this->baseUrl . "/login");
       exit();
     }
 
     if (!empty($this->allowedRoles)) {
-      $userRole = $user['role'];
+      $userRole = $user["role"];
       if (!in_array($userRole, $this->allowedRoles, true)) {
         http_response_code(403);
-        echo "403 Forbidden: Access Denied";
+        $content = __DIR__ . '/../views/forbidden.php';
+        require __DIR__ . '/../views/layouts/auth.php';
         exit();
       }
     }

@@ -1,8 +1,14 @@
+<?php
+$formAction = BASE_URL . '/signup';
+?>
+
+
 <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
     <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Sign Up</h2>
 
-    <form method="POST" action="<?= BASE_URL ?>/signup" class="space-y-4">
+    <form method="POST" action="<?= $formAction ?>" class="space-y-4">
+      <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '') ?>">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
         <input type="text" name="username" value="<?= htmlspecialchars($username ?? '') ?>" required placeholder="ashfak"
