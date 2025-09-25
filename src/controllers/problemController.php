@@ -44,14 +44,27 @@ class ProblemController
     $exampleInput = trim($post["example_input"] ?? "");
     $exampleOutput = trim($post["example_output"] ?? "");
     $tags = $post["tags"] ?? [];
+    $testCases = $post["testcases"] ?? [];
 
     $errors = [];
+    $testCaseErrors = [];
+
     if ($title === "") $errors["title"] = "Title is required.";
     if ($slug === "") $errors["slug"] = "Slug is required.";
     if ($statement === "") $errors["statement"] = "Statement is required.";
 
     if ($this->problemModel->getByTitle($title)) $errors["title"] = "Title already exists.";
     if ($this->problemModel->getBySlug($slug)) $errors["slug"] = "Slug already exists.";
+
+    foreach ($testCases as $idx => $tc) {
+      if (empty(trim($tc['input'])) || empty(trim($tc['output']))) {
+        $testCaseErrors[$idx] = "Input and output are required for test case #" . ($idx + 1);
+      }
+    }
+    if (!empty($testCaseErrors)) {
+      $errors["testcases"] = $testCaseErrors;
+    }
+
 
     if (!empty($errors)) {
       header("Content-Type: application/json");
@@ -84,6 +97,13 @@ class ProblemController
         $tag = strtolower(trim($tag));
         $tagId = $this->problemModel->findOrCreateTag($tag);
         $this->problemModel->attachTag($problemId, $tagId);
+      }
+
+      //? can be added points and visibility for later
+      foreach ($testCases as $tc) {
+        $input = trim($tc['input']);
+        $output = trim($tc['output']);
+        $this->problemModel->addTestCase($problemId, $input, $output);
       }
 
       $this->problemModel->commit();

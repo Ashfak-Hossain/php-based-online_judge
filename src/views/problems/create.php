@@ -116,6 +116,19 @@ $formAction = BASE_URL . '/admin/problems/create';
       </div>
     </div>
 
+    <!-- Test Cases Section -->
+    <div class="border-t border-gray-300 pt-8 mt-8">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Test Cases</h3>
+      <p class="text-sm text-gray-600 mb-4">Add the test cases for this problem.</p>
+      <div id="test-cases-list" class="space-y-8">
+        <!-- Test case items  -->
+      </div>
+      <button type="button" id="add-testcase-btn"
+        class="mt-4 inline-flex items-center rounded-md bg-indigo-100 px-3 py-1.5 text-sm font-medium text-indigo-700 hover:bg-indigo-200 border border-indigo-300 transition-colors">
+        + Add Test Case
+      </button>
+    </div>
+
     <!-- Submit button -->
     <div class="pt-3">
       <button type="submit"
@@ -125,3 +138,44 @@ $formAction = BASE_URL . '/admin/problems/create';
     </div>
   </form>
 </div>
+</form>
+</div>
+
+<script>
+  const testCasesList = document.getElementById('test-cases-list');
+  const addBtn = document.getElementById('add-testcase-btn');
+  let testCaseIdx = 0;
+
+  function createTestCase(idx) {
+    const wrapper = document.createElement('div');
+    wrapper.className = "p-4 border border-gray-200 rounded bg-gray-50";
+    wrapper.innerHTML = `
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-900" for="testcases[${idx}][input]">Input</label>
+        <textarea name="testcases[${idx}][input]" rows="2" required
+          class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-900" for="testcases[${idx}][output]">Output</label>
+        <textarea name="testcases[${idx}][output]" rows="2" required
+          class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+      </div>
+    </div>
+    <button type="button" class="remove-testcase-btn mt-4 text-xs text-red-600 hover:underline">Remove</button>
+  `;
+    // Remove button
+    wrapper.querySelector('.remove-testcase-btn').onclick = function() {
+      wrapper.remove();
+    };
+    return wrapper;
+  }
+
+  function addTestCase() {
+    const tc = createTestCase(testCaseIdx++);
+    testCasesList.appendChild(tc);
+  }
+
+  addBtn.addEventListener('click', addTestCase);
+  addTestCase();
+</script>

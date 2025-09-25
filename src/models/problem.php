@@ -138,6 +138,17 @@ class Problem
     }
   }
 
+
+  public function addTestCase($problemId, $input, $output, $points = 1, $visible = 0)
+  {
+    $query = $this->pdo->prepare("INSERT INTO test_cases (problem_id, input_file, output_file, points, visible) VALUES (?, ?, ?, ?, ?)");
+    if (!$query->execute([$problemId, $input, $output, $points, $visible])) {
+      throw new Exception("Failed to add test case to problem ID: $problemId");
+    }
+    return $this->pdo->lastInsertId();
+  }
+
+
   public function beginTransaction()
   {
     $this->pdo->beginTransaction();

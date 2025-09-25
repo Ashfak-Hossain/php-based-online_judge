@@ -39,6 +39,8 @@ export function init() {
               errorEl.textContent = message;
             }
           }
+          //! debug
+          console.log(res);
           showToast('Please fix the highlighted errors and try again.', 'error');
         } else {
           showToast(
