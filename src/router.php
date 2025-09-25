@@ -202,7 +202,10 @@ class Router
       if (is_string($this->notFoundHandler)) {
         $fileName = $this->notFoundHandler . ".php";
         $fullPath = $this->viewDir . "/" . $fileName;
-        if (is_file($fullPath)) return require $fullPath;
+        if (is_file($fullPath)) {
+          $content = $fullPath;
+          require __DIR__ . "/views/layouts/auth.php";
+        }
       }
     }
     http_response_code(404);

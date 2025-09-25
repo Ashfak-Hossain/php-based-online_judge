@@ -18,8 +18,17 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
-  <main class="flex-grow container mx-auto px-4 py-6">
-    <?php include $content; ?>
+  <?php include __DIR__ . "/../components/nav.php"; ?>
+
+  <main class="flex-grow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Admin Panel -->
+      <?php if ($user && ($user["role"] !== "user")): ?>
+        <?php include  __DIR__ . "/../components/adminHeading.php"; ?>
+      <?php endif; ?>
+
+      <?php include $content; ?>
+    </div>
   </main>
 
   <!-- Toastify JS -->
