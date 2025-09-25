@@ -4,8 +4,7 @@
     <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
       <thead class="bg-gray-100">
         <tr>
-          <th class="px-4 py-2 text-left text-sm font-me
-          dium text-gray-600">ID</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">ID</th>
           <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Title</th>
           <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Difficulty</th>
           <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Tags</th>
