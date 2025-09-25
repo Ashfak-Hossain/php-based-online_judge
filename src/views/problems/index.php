@@ -17,7 +17,9 @@
           <tr>
             <td class="px-4 py-2 text-sm text-gray-800"><?= $problem['id'] ?></td>
             <td class="px-4 py-2 text-sm text-blue-600 font-medium">
-              <?= htmlspecialchars($problem['title']) ?>
+              <a href="<?= BASE_URL ?>/problems/<?= $problem['slug'] ?>" class="hover:underline">
+                <?= htmlspecialchars($problem['title']) ?>
+              </a>
             </td>
             <td class="px-4 py-2 text-sm">
               <?php if ($problem['difficulty'] === 'easy'): ?>

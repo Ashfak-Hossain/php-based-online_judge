@@ -29,6 +29,33 @@ class ProblemController
     // var_dump($problems);
   }
 
+  public function show($request)
+  {
+    $slug = $request["params"]["slug"] ?? null;
+    if (!$slug) {
+      header("Content-Type: application/json");
+      echo json_encode([
+        "success" => false,
+        "message" => "Problem Id not found"
+      ]);
+      exit;
+    }
+
+    $problem = $this->problemModel->getBySlug($slug);
+
+    if (!$problem) {
+      header("Content-Type: application/json");
+      echo json_encode(([
+        "success" => false,
+        "message" => "Problem not found"
+      ]));
+      exit;
+    }
+    $title = $problem["title"];
+    $content = __DIR__ . "/../views/problems/problem.php";
+    require __DIR__ . "/../views/layouts/index.php";
+  }
+
   public function create($request)
   {
     $post = $request["post"];

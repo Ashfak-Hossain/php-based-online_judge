@@ -45,6 +45,7 @@ $router->post("/signup", [$authController, "signup"], [$authGuest, $csrf]);
 
 
 /* Problems management Routes */
+$router->get('problems/$slug', [$problemController, "show"], [$auth]);
 $router->get("/admin/problems", [$problemController, "index"], [$authAdmin]);
 $router->get("/admin/problems/create", [$problemController, "createForm"], [$authAdmin]);
 // $router->get("/admin/problems/edit/$slug", [$problemController, "editForm"], [$authAdmin]);
