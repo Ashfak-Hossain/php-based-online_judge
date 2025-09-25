@@ -51,7 +51,7 @@ $router->get("/admin/problems/create", [$problemController, "createForm"], [$aut
 
 $router->post("/admin/problems/create", [$problemController, "create"], [$authAdmin, $csrf]);
 // $router->post("/admin/problems/edit/$slug", [$problemController, "edit"], [$authAdmin]);
-// $router->post("/admin/problems/delete/$slug", [$problemController, "delete"], [$authAdmin]);
+$router->post('/admin/problems/delete/$id', [$problemController, "delete"], [$authAdmin]);
 
 
 /* Home Route */

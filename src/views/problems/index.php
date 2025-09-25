@@ -39,9 +39,9 @@
             <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($problem['created_by']) ?></td>
             <td class="px-4 py-2 text-sm text-right">
               <a href="<?= BASE_URL ?>/admin/problems/<?= $problem['id'] ?>/edit" class="text-blue-600 hover:underline mr-3">Edit</a>
-              <form action="<?= BASE_URL ?>/admin/problems/<?= $problem['id'] ?>/delete" method="POST" class="inline">
-                <button type="submit" class="text-red-600 hover:underline">Delete</button>
-              </form>
+              <button type="button" class="delete-btn text-red-600 hover:underline" data-id="<?= $problem['id'] ?>">
+                Delete
+              </button>
             </td>
           </tr>
         <?php endforeach; ?>
