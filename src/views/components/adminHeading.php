@@ -13,7 +13,7 @@ $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         ['Add Problem', BASE_URL . '/admin/problems/create'],
       ];
       foreach ($links as [$label, $url]) {
-        $isActive = strpos($currentPath, parse_url($url, PHP_URL_PATH)) === 0;
+        $isActive = $currentPath === parse_url($url, PHP_URL_PATH);
         echo '<a href="' . $url . '" class="px-2 py-1 rounded text-sm font-medium transition text-gray-700 hover:text-indigo-700 hover:bg-indigo-50' .
           ($isActive ? ' underline underline-offset-4 text-indigo-700' : '') .
           '">' . $label . '</a>';
