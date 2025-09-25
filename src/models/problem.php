@@ -43,7 +43,17 @@ class Problem
   {
     $query = $this->pdo->prepare("SELECT * FROM problems WHERE slug = ?");
     $query->execute([$slug]);
-    return $query->fetch(PDO::FETCH_ASSOC);
+    $problem = $query->fetch(PDO::FETCH_ASSOC);
+
+    if (!$problem) return null;
+
+    $tagQuery = $this->pdo->prepare("SELECT t.name FROM problem_tags pt JOIN tags t ON pt.tag_id = t.id WHERE pt.problem_id = ?");
+    $tagQuery->execute([$problem['id']]);
+    $tags = $tagQuery->fetchAll(PDO::FETCH_COLUMN);
+
+    $problem['tags'] = $tags ?: [];
+
+    return $problem;
   }
 
   public function getByTitle($title)
